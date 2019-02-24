@@ -158,7 +158,7 @@ void keyPressed() {
     showNonBonding = !showNonBonding;
   } else {
     if (shortcuts.containsKey(key))
-      particleList.add(new Particle(new PVector(mouseX / cameraZoom + viewPortTopX, mouseY / cameraZoom + viewPortTopY), randVel(1), new Atom(shortcuts.get(key)), particleList.size()));
+      particleList.add(new Particle(getMousePos(), randVel(1), new Atom(shortcuts.get(key)), particleList.size()));
   }
 }
 
