@@ -66,8 +66,7 @@ void mousePressed() {
       return;
     float minD2 = -1;
     for (int i = 0; i < particleList.size(); i++) {
-      PVector mouse = new PVector(mouseX, mouseY).div(cameraZoom).add(viewPortTopLeft);
-      PVector dif = PVector.sub(particleList.get(i).pos, mouse);
+      PVector dif = PVector.sub(particleList.get(i).pos, getMousePos());
       float d2 = dif.x * dif.x + dif.y * dif.y;
       //stroke(1); //debugging purposes, please ignore
       //noFill();
@@ -80,8 +79,7 @@ void mousePressed() {
     dragging = true;
   }
   else if(mouseButton == CENTER) {
-   lastCPosX = cameraPosX;
-   lastCPosY = cameraPosY;
+   lastCPos = cameraPos;
    lastMX = mouseX;
    lastMY = mouseY;
    //println(mouseX);
@@ -94,20 +92,19 @@ void mouseReleased() {
 
 void mouseDragged() {
    if(mousePressed && mouseButton==CENTER) {
-       cameraPosX = (int)(lastCPosX + (lastMX - mouseX) / cameraZoom);
-       cameraPosY = (int)(lastCPosY + (lastMY - mouseY) / cameraZoom);
+       cameraPos.x = (int)(lastCPos.x + (lastMX - mouseX) / cameraZoom);
+       cameraPos.y = (int)(lastCPos.y + (lastMY - mouseY) / cameraZoom);
        viewPortWidth = (int)(width/cameraZoom);
        viewPortHeight = (int)(height/cameraZoom);
-       viewPortTopLeft.x= cameraPosX - viewPortWidth/2;
-       viewPortTopLeft.x = cameraPosY - viewPortHeight/2;
-       println(cameraPosX);
+       viewPortTopLeft.x= cameraPos.x - viewPortWidth/2;
+       viewPortTopLeft.x = cameraPos.y - viewPortHeight/2;
+       //println(cameraPos.x);
    }
 }
 
 void physUpdateParticles(Particle[] particles) {
   if (dragging) {
-    PVector mouse = new PVector(mouseX, mouseY).div(cameraZoom).add(viewPortTopLeft);
-    PVector dif = PVector.sub(mouse, dragParticle.pos);
+    PVector dif = PVector.sub(getMousePos(), dragParticle.pos);
     dragParticle.addForce(PVector.mult(dif, dif.mag()));
   }
   for (int i = 0; i < particles.length; i++) {

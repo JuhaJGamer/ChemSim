@@ -15,18 +15,16 @@ void init() {
   viewPortTopLeft = new PVector(0,0);
   viewPortWidth = width;
   viewPortHeight = height;
-  cameraPosX = width/2;
-  cameraPosY = height/2;
+  cameraPos = new PVector(width/2,height/2);
+  lastCPos = cameraPos;
 }
 
 int displayMode = 0;
 boolean paused = false;
 boolean showNonBonding = false;
 
-int cameraPosX = width/2;
-int cameraPosY = height/2;
-int lastCPosY = 0;
-int lastCPosX = 0;
+PVector cameraPos;
+PVector lastCPos;
 int lastMX = 0;
 int lastMY = 0;
 float cameraZoom = 1;
@@ -75,7 +73,12 @@ void makeMixtureOld(ATYPE[] mix, int count) {
 //Converts a position on screen (usually mouse pos) into the exact position in the world. Used for user interaction
 PVector screenToAbsoluteVector(PVector in)
 {
-  return in.mult(cameraZoom).sub(viewPortTopLeft);
+  return in.div(cameraZoom).add(viewPortTopLeft);
+}
+
+//Wrapper for earlier to get mouse pos in world
+PVector getMousePos() {
+  return screenToAbsoluteVector(new PVector(mouseX,mouseY));
 }
 
 int particleCount = 3200;
@@ -86,8 +89,8 @@ void mouseWheel(MouseEvent event) {
    rMul = rMulO * cameraZoom;
    viewPortWidth = (int)(width/cameraZoom);
    viewPortHeight = (int)(height/cameraZoom);
-   viewPortTopLeft.x = cameraPosX - viewPortWidth/2;
-   viewPortTopLeft.y = cameraPosY - viewPortHeight/2;
+   viewPortTopLeft.x = cameraPos.x - viewPortWidth/2;
+   viewPortTopLeft.y = cameraPos.y - viewPortHeight/2;
    println(cameraZoom);
 }
 
@@ -156,7 +159,7 @@ void keyPressed() {
     showNonBonding = !showNonBonding;
   } else {
     if (shortcuts.containsKey(key))
-      particleList.add(new Particle(screenToAbsoluteVector(new PVector(mouseX, mouseY)), randVel(1), new Atom(shortcuts.get(key)), particleList.size()));
+      particleList.add(new Particle(getMousePos(), randVel(1), new Atom(shortcuts.get(key)), particleList.size()));
     /*
     int tmp = elemCounter;
      for (int i = 0; i < ATYPE.values().length; i++) {
