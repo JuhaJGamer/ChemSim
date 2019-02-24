@@ -16,6 +16,8 @@ void init() {
   viewPortTopY = 0;
   viewPortWidth = width;
   viewPortHeight = height;
+  cameraPosX = width/2;
+  cameraPosY = height/2;
 }
 
 int displayMode = 0;

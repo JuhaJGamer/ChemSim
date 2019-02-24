@@ -42,10 +42,10 @@ PVector randVel(float v) {
 
 void drawBond(PVector a, PVector b, int n) {
   boolean white = false;
-  if(a.x < viewPortTopX && a.y < viewPortTopY) return;
-  if(a.x > viewPortTopX + viewPortWidth && a.y > viewPortTopY + viewPortWidth) return;
-  if(b.x < viewPortTopX && b.y < viewPortTopY) return;
-  if(b.x > viewPortTopX + viewPortWidth && b.y > viewPortTopY + viewPortWidth) return;
+  if(a.x < viewPortTopX && b.x < viewPortTopX) return;
+  if(a.x > viewPortTopX + viewPortWidth && b.x < viewPortTopX + viewPortWidth) return;
+  if(a.y < viewPortTopY && b.y < viewPortTopY) return;
+  if(a.y > viewPortTopY + viewPortHeight && b.y > viewPortTopY + viewPortWidth) return;
   for (int i = n; i > 0; i--) {
     if (white)
       stroke(255);
@@ -53,7 +53,7 @@ void drawBond(PVector a, PVector b, int n) {
       stroke(0);
     white = !white;
     strokeWeight(rMul * (i * 1.5 - 0.75));
-    line(a.x, a.y, b.x, b.y);
+    line(a.x * cameraZoom, a.y * cameraZoom, b.x * cameraZoom, b.y *cameraZoom);
   }
 }
 
