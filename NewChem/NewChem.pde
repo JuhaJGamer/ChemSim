@@ -39,7 +39,7 @@ int elemCounter = 0;
 class recipecomponent {
    public ATYPE atom;
    public int weight;
-   
+
    public recipecomponent(ATYPE atom, int weight) {
       this.atom = atom;
       this.weight = weight;
@@ -55,7 +55,7 @@ void makeMixture(recipecomponent[] mix_c, int count) {
     }
   }
   for (int i = 0; i < count; i++) {
-    particleList.add(new Particle(randPos(), randVel(10), 
+    particleList.add(new Particle(randPos(), randVel(10),
       new Atom(mix.get((int)random(0, mix.size()))), particleList.size()
       ));
   }
@@ -64,7 +64,7 @@ void makeMixture(recipecomponent[] mix_c, int count) {
 void makeMixtureOld(ATYPE[] mix, int count) {
   particleList = new ArrayList<Particle>();
   for (int i = 0; i < count; i++) {
-    particleList.add(new Particle(randPos(), randVel(10), 
+    particleList.add(new Particle(randPos(), randVel(10),
       new Atom(mix[(int)random(0, mix.length)]), particleList.size()
       ));
   }
@@ -81,17 +81,16 @@ PVector getMousePos() {
   return screenToAbsoluteVector(new PVector(mouseX,mouseY));
 }
 
-int particleCount = 3200;
+int particleCount = 800;
 
 void mouseWheel(MouseEvent event) {
    cameraZoom -= event.getCount() * mwheelMul;
    if(cameraZoom <= 1) cameraZoom = 1;
-   rMul = rMulO * cameraZoom;
+   rMul = cameraZoom;
    viewPortWidth = (int)(width/cameraZoom);
    viewPortHeight = (int)(height/cameraZoom);
    viewPortTopLeft.x = cameraPos.x - viewPortWidth/2;
    viewPortTopLeft.y = cameraPos.y - viewPortHeight/2;
-   println(cameraZoom);
 }
 
 void keyPressed() {
@@ -159,20 +158,7 @@ void keyPressed() {
     showNonBonding = !showNonBonding;
   } else {
     if (shortcuts.containsKey(key))
-      particleList.add(new Particle(getMousePos(), randVel(1), new Atom(shortcuts.get(key)), particleList.size()));
-    /*
-    int tmp = elemCounter;
-     for (int i = 0; i < ATYPE.values().length; i++) {
-     ATYPE atype = ATYPE.values()[i];
-     if (atype.toString().toLowerCase().charAt(0) == key) {
-     if (tmp <= 0) {
-     particleList.add(new Particle(new PVector(mouseX, mouseY), randVel(1), new Atom(atype), particleList.size()));
-     break;
-     }
-     tmp--;
-     }
-     }
-     */
+      particleList.add(new Particle(new PVector(mouseX / cameraZoom + viewPortTopX, mouseY / cameraZoom + viewPortTopY), randVel(1), new Atom(shortcuts.get(key)), particleList.size()));
   }
 }
 
