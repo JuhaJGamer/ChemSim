@@ -79,7 +79,7 @@ void mousePressed() {
     dragging = true;
   }
   else if(mouseButton == CENTER) {
-   lastCPos = cameraPos;
+   lastCPos = new PVector(cameraPos.x,cameraPos.y); //Don't ask, it's a stupid workaround to lastCPos = cameraPos actually assigning lastCPos to a pointer to cameraPos, so that they will always be the same even if one changes (which makes panning break)
    lastMX = mouseX;
    lastMY = mouseY;
    //println(mouseX);
@@ -91,14 +91,14 @@ void mouseReleased() {
 }
 
 void mouseDragged() {
-   if(mousePressed && mouseButton==CENTER) {
-       cameraPos.x = (int)(lastCPos.x + (lastMX - mouseX) / cameraZoom);
-       cameraPos.y = (int)(lastCPos.y + (lastMY - mouseY) / cameraZoom);
-       viewPortWidth = (int)(width/cameraZoom);
-       viewPortHeight = (int)(height/cameraZoom);
-       viewPortTopLeft.x= cameraPos.x - viewPortWidth/2;
-       viewPortTopLeft.x = cameraPos.y - viewPortHeight/2;
-       //println(cameraPos.x);
+   if(mousePressed && mouseButton==CENTER) {  
+     cameraPos.x = (int)(lastCPos.x + (lastMX - mouseX));
+     cameraPos.y = (int)(lastCPos.y + (lastMY - mouseY));
+     viewPortWidth = (int)(width/cameraZoom);
+     viewPortHeight = (int)(height/cameraZoom);
+     viewPortTopLeft.x = cameraPos.x - viewPortWidth/2;
+     viewPortTopLeft.y = cameraPos.y - viewPortHeight/2;
+     println(lastCPos.x);
    }
 }
 
