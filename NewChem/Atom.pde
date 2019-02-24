@@ -4,7 +4,7 @@ enum BTYPE {
 };
 
 enum ATYPE {
-  H, O, C, N, Na, Cl, Br,
+  H, O, C, N, Na, Cl, Br, S
 }
 
 float getBondEnergy(ATYPE a, ATYPE b, int n) {

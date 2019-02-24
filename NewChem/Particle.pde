@@ -8,7 +8,7 @@ final float maxVel2 = maxVel * maxVel;
 final float minVel2 = minVel * minVel;
 
 final float tMul = 0.1;
-final float rMul = 3;
+final float rMul = 0.5;
 final float mMul = 1;
 final float repelMul = 0.07;
 final float cMul = 0.01;
