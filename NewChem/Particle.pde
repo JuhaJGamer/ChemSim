@@ -53,7 +53,7 @@ void drawBond(PVector a, PVector b, int n) {
       stroke(0);
     white = !white;
     strokeWeight(rMul * (i * 1.5 - 0.75));
-    line(a.x * cameraZoom, a.y * cameraZoom, b.x * cameraZoom, b.y *cameraZoom);
+    line((a.x-viewPortTopX) * cameraZoom, (a.y-viewPortTopY) * cameraZoom, (b.x-viewPortTopX) * cameraZoom, (b.y-viewPortTopY) *cameraZoom);
   }
 }
 
