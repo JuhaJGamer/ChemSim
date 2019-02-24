@@ -8,7 +8,7 @@ final float maxVel2 = maxVel * maxVel;
 final float minVel2 = minVel * minVel;
 
 final float tMul = 0.1;
-final float rMul = 0.5;
+final float rMulO = 0.5;
 final float mMul = 1;
 final float repelMul = 0.07;
 final float cMul = 0.01;
@@ -22,6 +22,8 @@ final float eaMul = 1.1;
 final float wallMul = 20;
 final float probMul = 40;
 final float chargeDist = 4;
+
+float rMul = rMulO;
 
 final float g = 0;
 
@@ -148,6 +150,8 @@ class Particle {
   }
 
   void show(int displayMode) {
+    if(pos.x < viewPortTopX-(r*rMul) || pos.y < viewPortTopY-(r*rMul)) return;
+    if(pos.x > viewPortTopX + viewPortWidth + (r*rMul) && pos.y > viewPortTopY + viewPortWidth + (r*rMul)) return;
     if (displayMode == 0)
       fill(c);
     else if (displayMode == 1)
@@ -162,16 +166,16 @@ class Particle {
     if(displayMode == 3 && !nonBonding) {
       fill(255);
       if(atom.atype != ATYPE.H && atom.atype != ATYPE.C) {
-        ellipse(pos.x, pos.y, 2 * r, 2 * r);
+        ellipse(pos.x * cameraZoom, pos.y * cameraZoom, 2 * r, 2 * r);
         textSize(2 * r);
         fill(0);
         text(atom.atype.toString(), pos.x, pos.y);
       } else if (atom.atype == ATYPE.C) {
         fill(0);
-        ellipse(pos.x, pos.y, 0.8 * rMul, 0.8 * rMul);
+        ellipse(pos.x * cameraZoom, pos.y * cameraZoom, 0.8 * rMul, 0.8 * rMul);
       }
     } else {
-      ellipse(pos.x, pos.y, 2 * r, 2 * r);
+      ellipse(pos.x * cameraZoom, pos.y * cameraZoom, 2 * r * rMul, 2 * r * rMul);
       if (displayMode == 1 && !nonBonding) {
         textSize(2 * r);
         fill(0);
