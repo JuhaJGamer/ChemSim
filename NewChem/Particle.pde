@@ -8,7 +8,7 @@ final float maxVel2 = maxVel * maxVel;
 final float minVel2 = minVel * minVel;
 
 final float tMul = 0.1;
-final float rMulO = 0.5;
+final float initRMul = 1.5;
 final float mMul = 1;
 final float repelMul = 0.07;
 final float cMul = 0.01;
@@ -23,7 +23,7 @@ final float wallMul = 20;
 final float probMul = 40;
 final float chargeDist = 4;
 
-float rMul = rMulO;
+float rMul = initRMul;
 
 final float g = 0;
 
@@ -143,7 +143,7 @@ class Particle {
   Particle(PVector _pos, PVector _vel, Atom _atom, int _id) {
     pos = _pos;
     vel = _vel;
-    r = radii.get(_atom.atype) * rMul;
+    r = radii.get(_atom.atype) * initRMul;
     m = masses.get(_atom.atype) * mMul;
     c = colors.get(_atom.atype);
     atom = _atom;
@@ -163,7 +163,7 @@ class Particle {
   Particle(PVector _pos, PVector _vel, int _id, float _str) {
     pos = _pos;
     vel = _vel;
-    r = _str * rMul;
+    r = _str * initRMul;
     m = 1;
     c = color(0);
     nonBonding = true;
@@ -370,7 +370,7 @@ class Particle {
     for (int i = 0; i < bonds.size(); i++) {
       Bond bond = bonds.get(i);
       if ((exclude == null || exclude != bonds.get(i)) && !bonds.get(i).a.nonBonding && !bonds.get(i).b.nonBonding) {
-        float energy = bond.bondEnergy - getBondEnergy(bond.a.atom.atype, bond.b.atom.atype, bond.n - n); 
+        float energy = bond.bondEnergy - getBondEnergy(bond.a.atom.atype, bond.b.atom.atype, bond.n - n);
         if (energy < lowestEnergy || lowestEnergy == -1) {
           lowestEnergy = energy;
           lowestBond = bond;
