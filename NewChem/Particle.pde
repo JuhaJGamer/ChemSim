@@ -197,9 +197,9 @@ class Particle {
       fill(255);
       if(atom.atype != ATYPE.H && atom.atype != ATYPE.C) {
         ellipse((pos.x-viewPortTopX) * cameraZoom, (pos.y-viewPortTopY) * cameraZoom, 2 * r, 2 * r);
-        textSize(2 * r);
+        textSize(2 * r * rMul);
         fill(0);
-        text(atom.atype.toString(), pos.x, pos.y);
+        text(atom.atype.toString(), (pos.x-viewPortTopX) * cameraZoom, (pos.y-viewPortTopY) * cameraZoom);
       } else if (atom.atype == ATYPE.C) {
         fill(0);
         ellipse((pos.x-viewPortTopX) * cameraZoom, (pos.y-viewPortTopY) * cameraZoom, 0.8 * rMul, 0.8 * rMul);
@@ -207,9 +207,9 @@ class Particle {
     } else {
       ellipse((pos.x-viewPortTopX) * cameraZoom, (pos.y-viewPortTopY) * cameraZoom, 2 * r * rMul, 2 * r * rMul);
       if (displayMode == 1 && !nonBonding) {
-        textSize(2 * r);
+        textSize(2 * r * rMul);
         fill(0);
-        text(atom.atype.toString(), pos.x, pos.y);
+        text(atom.atype.toString(), (pos.x-viewPortTopX) * cameraZoom, (pos.y-viewPortTopY) * cameraZoom);
       }
     }
   }
