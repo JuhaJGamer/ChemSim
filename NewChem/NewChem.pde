@@ -12,11 +12,31 @@ void init() {
   initNonBondStrs();
   initBondEnergies();
   initShortcuts();
+  viewPortTopX = 0;
+  viewPortTopY = 0;
+  viewPortWidth = width;
+  viewPortHeight = height;
+  cameraPosX = width/2;
+  cameraPosY = height/2;
 }
 
 int displayMode = 0;
 boolean paused = false;
 boolean showNonBonding = false;
+
+int cameraPosX = width/2;
+int cameraPosY = height/2;
+int lastCPosY = 0;
+int lastCPosX = 0;
+int lastMX = 0;
+int lastMY = 0;
+float cameraZoom = 1;
+float mwheelMul = 0.2;
+
+int viewPortTopX = 0;
+int viewPortTopY = 0;
+int viewPortWidth = width;
+int viewPortHeight = height;
 
 int elemCounter = 0;
 
@@ -55,6 +75,17 @@ void makeMixtureOld(ATYPE[] mix, int count) {
 }
 
 int particleCount = 2400;
+
+void mouseWheel(MouseEvent event) {
+   cameraZoom -= event.getCount() * mwheelMul;
+   if(cameraZoom <= 1) cameraZoom = 1;
+   rMul = rMulO * cameraZoom;
+   viewPortWidth = (int)(width/cameraZoom);
+   viewPortHeight = (int)(height/cameraZoom);
+   viewPortTopX = cameraPosX - viewPortWidth/2;
+   viewPortTopY = cameraPosY - viewPortHeight/2;
+   println(cameraZoom);
+}
 
 void keyPressed() {
   if (key == '1') {

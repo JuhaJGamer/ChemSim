@@ -8,7 +8,7 @@ final float maxVel2 = maxVel * maxVel;
 final float minVel2 = minVel * minVel;
 
 final float tMul = 0.1;
-final float rMul = 0.5;
+final float rMulO = 0.5;
 final float mMul = 1;
 final float repelMul = 0.07;
 final float cMul = 0.01;
@@ -22,6 +22,8 @@ final float eaMul = 1.1;
 final float wallMul = 20;
 final float probMul = 40;
 final float chargeDist = 4;
+
+float rMul = rMulO;
 
 final float g = 0;
 
@@ -40,6 +42,10 @@ PVector randVel(float v) {
 
 void drawBond(PVector a, PVector b, int n) {
   boolean white = false;
+  if(a.x < viewPortTopX && b.x < viewPortTopX) return;
+  if(a.x > viewPortTopX + viewPortWidth && b.x < viewPortTopX + viewPortWidth) return;
+  if(a.y < viewPortTopY && b.y < viewPortTopY) return;
+  if(a.y > viewPortTopY + viewPortHeight && b.y > viewPortTopY + viewPortWidth) return;
   for (int i = n; i > 0; i--) {
     if (white)
       stroke(255);
@@ -47,7 +53,7 @@ void drawBond(PVector a, PVector b, int n) {
       stroke(0);
     white = !white;
     strokeWeight(rMul * (i * 1.5 - 0.75));
-    line(a.x, a.y, b.x, b.y);
+    line((a.x-viewPortTopX) * cameraZoom, (a.y-viewPortTopY) * cameraZoom, (b.x-viewPortTopX) * cameraZoom, (b.y-viewPortTopY) *cameraZoom);
   }
 }
 
@@ -55,27 +61,53 @@ Particle dragParticle;
 boolean dragging = false;
 
 void mousePressed() {
-  if (particleList.size() == 0)
-    return;
-  float minD2 = -1;
-  for (int i = 0; i < particleList.size(); i++) {
-    PVector dif = PVector.sub(particleList.get(i).pos, new PVector(mouseX, mouseY));
-    float d2 = dif.x * dif.x + dif.y * dif.y;
-    if (d2 < minD2 || minD2 < 0) {
-      minD2 = d2;
-      dragParticle = particleList.get(i);
+  if(mouseButton == LEFT) {
+    if (particleList.size() == 0)
+      return;
+    float minD2 = -1;
+    for (int i = 0; i < particleList.size(); i++) {
+      PVector mouse = new PVector(mouseX, mouseY).div(cameraZoom).add(new PVector(viewPortTopX,viewPortTopY));
+      PVector dif = PVector.sub(particleList.get(i).pos, mouse);
+      float d2 = dif.x * dif.x + dif.y * dif.y;
+      //stroke(1); //debugging purposes, please ignore
+      //noFill();
+      //ellipse(mouse.x, mouse.y, 2,2);
+      if (d2 < minD2 || minD2 < 0) {
+        minD2 = d2;
+        dragParticle = particleList.get(i);
+      }
     }
+    dragging = true;
   }
-  dragging = true;
+  else if(mouseButton == CENTER) {
+   lastCPosX = cameraPosX;
+   lastCPosY = cameraPosY;
+   lastMX = mouseX;
+   lastMY = mouseY;
+   //println(mouseX);
+  }
 }
 
 void mouseReleased() {
   dragging = false;
 }
 
+void mouseDragged() {
+   if(mousePressed && mouseButton==CENTER) {
+       cameraPosX = (int)(lastCPosX + (lastMX - mouseX) / cameraZoom);
+       cameraPosY = (int)(lastCPosY + (lastMY - mouseY) / cameraZoom);
+       viewPortWidth = (int)(width/cameraZoom);
+       viewPortHeight = (int)(height/cameraZoom);
+       viewPortTopX = cameraPosX - viewPortWidth/2;
+       viewPortTopY = cameraPosY - viewPortHeight/2;
+       println(cameraPosX);
+   }
+}
+
 void physUpdateParticles(Particle[] particles) {
   if (dragging) {
-    PVector dif = PVector.sub(new PVector(mouseX, mouseY), dragParticle.pos);
+    PVector mouse = new PVector(mouseX, mouseY).div(cameraZoom).add(new PVector(viewPortTopX,viewPortTopY));
+    PVector dif = PVector.sub(mouse, dragParticle.pos);
     dragParticle.addForce(PVector.mult(dif, dif.mag()));
   }
   for (int i = 0; i < particles.length; i++) {
@@ -148,6 +180,8 @@ class Particle {
   }
 
   void show(int displayMode) {
+    if(pos.x < viewPortTopX-(r*rMul) || pos.y < viewPortTopY-(r*rMul)) return;
+    if(pos.x > viewPortTopX + viewPortWidth + (r*rMul) && pos.y > viewPortTopY + viewPortWidth + (r*rMul)) return;
     if (displayMode == 0)
       fill(c);
     else if (displayMode == 1)
@@ -162,20 +196,20 @@ class Particle {
     if(displayMode == 3 && !nonBonding) {
       fill(255);
       if(atom.atype != ATYPE.H && atom.atype != ATYPE.C) {
-        ellipse(pos.x, pos.y, 2 * r, 2 * r);
-        textSize(2 * r);
+        ellipse((pos.x-viewPortTopX) * cameraZoom, (pos.y-viewPortTopY) * cameraZoom, 2 * r, 2 * r);
+        textSize(2 * r * rMul);
         fill(0);
-        text(atom.atype.toString(), pos.x, pos.y);
+        text(atom.atype.toString(), (pos.x-viewPortTopX) * cameraZoom, (pos.y-viewPortTopY) * cameraZoom);
       } else if (atom.atype == ATYPE.C) {
         fill(0);
-        ellipse(pos.x, pos.y, 0.8 * rMul, 0.8 * rMul);
+        ellipse((pos.x-viewPortTopX) * cameraZoom, (pos.y-viewPortTopY) * cameraZoom, 0.8 * rMul, 0.8 * rMul);
       }
     } else {
-      ellipse(pos.x, pos.y, 2 * r, 2 * r);
+      ellipse((pos.x-viewPortTopX) * cameraZoom, (pos.y-viewPortTopY) * cameraZoom, 2 * r * rMul, 2 * r * rMul);
       if (displayMode == 1 && !nonBonding) {
-        textSize(2 * r);
+        textSize(2 * r * rMul);
         fill(0);
-        text(atom.atype.toString(), pos.x, pos.y);
+        text(atom.atype.toString(), (pos.x-viewPortTopX) * cameraZoom, (pos.y-viewPortTopY) * cameraZoom);
       }
     }
   }
