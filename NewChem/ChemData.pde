@@ -17,6 +17,7 @@ void initAtypes() {
   atypes.put(ATYPE.Na, new float[]{0, -1, 1});
   atypes.put(ATYPE.Cl, new float[]{0, 1, 3});
   atypes.put(ATYPE.Br, new float[]{0, 1, 2});
+  atypes.put(ATYPE.S, new float[] {0, 2, 2.58});
 }
 
 void initColors() {
@@ -28,6 +29,7 @@ void initColors() {
   colors.put(ATYPE.Na, color(170, 20, 190));
   colors.put(ATYPE.Cl, color(80, 180, 100));
   colors.put(ATYPE.Br, color(135, 35, 0));
+  colors.put(ATYPE.S, color(255,255,0));
 }
 
 void initRadii() {
@@ -39,6 +41,7 @@ void initRadii() {
   radii.put(ATYPE.Na, 5f);
   radii.put(ATYPE.Cl, 6f);
   radii.put(ATYPE.Br, 10f);
+  radii.put(ATYPE.S, 8.5f);
 }
 
 void initMasses() {
@@ -50,6 +53,7 @@ void initMasses() {
   masses.put(ATYPE.Na, 9f);
   masses.put(ATYPE.Cl, 11f);
   masses.put(ATYPE.Br, 18f);
+  masses.put(ATYPE.S, 16f);
 }
 
 void initNonBondCs() {
@@ -61,6 +65,7 @@ void initNonBondCs() {
   nonBondCs.put(ATYPE.Na, 0);
   nonBondCs.put(ATYPE.Cl, 0);
   nonBondCs.put(ATYPE.Br, 0);
+  nonBondCs.put(ATYPE.S, 0);
 }
 
 void initNonBondStrs() {
@@ -72,6 +77,7 @@ void initNonBondStrs() {
   nonBondStrs.put(ATYPE.Na, 0f);
   nonBondStrs.put(ATYPE.Cl, 0f);
   nonBondStrs.put(ATYPE.Br, 0f);
+  nonBondStrs.put(ATYPE.S,0f);
 }
 
 void initShortcuts() {
@@ -83,4 +89,5 @@ void initShortcuts() {
   shortcuts.put('N', ATYPE.Na);
   shortcuts.put('C', ATYPE.Cl);
   shortcuts.put('B', ATYPE.Br);
+  shortcuts.put('S', ATYPE.S);
 }

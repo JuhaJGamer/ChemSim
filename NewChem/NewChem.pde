@@ -20,7 +20,32 @@ boolean showNonBonding = false;
 
 int elemCounter = 0;
 
-void makeMixture(ATYPE[] mix, int count) {
+class recipecomponent {
+   public ATYPE atom;
+   public int weight;
+   
+   public recipecomponent(ATYPE atom, int weight) {
+      this.atom = atom;
+      this.weight = weight;
+   }
+}
+
+void makeMixture(recipecomponent[] mix_c, int count) {
+  particleList = new ArrayList<Particle>();
+  ArrayList<ATYPE> mix = new ArrayList<ATYPE>();
+  for(int i = 0; i < mix_c.length; i++) {
+    for(int j = 0; j < mix_c[i].weight; j++) {
+      mix.add(mix_c[i].atom);
+    }
+  }
+  for (int i = 0; i < count; i++) {
+    particleList.add(new Particle(randPos(), randVel(10), 
+      new Atom(mix.get((int)random(0, mix.size()))), particleList.size()
+      ));
+  }
+}
+
+void makeMixtureOld(ATYPE[] mix, int count) {
   particleList = new ArrayList<Particle>();
   for (int i = 0; i < count; i++) {
     particleList.add(new Particle(randPos(), randVel(10), 
@@ -29,21 +54,39 @@ void makeMixture(ATYPE[] mix, int count) {
   }
 }
 
-int particleCount = 300;
+int particleCount = 2400;
 
 void keyPressed() {
   if (key == '1') {
     ATYPE[] tmp = new ATYPE[] {ATYPE.H, ATYPE.H, ATYPE.O};
-    makeMixture(tmp, particleCount);
+    makeMixtureOld(tmp, particleCount);
   } else if (key == '2') {
     ATYPE[] tmp = new ATYPE[] {ATYPE.C, ATYPE.H, ATYPE.H, ATYPE.H, ATYPE.H};
-    makeMixture(tmp, particleCount);
+    makeMixtureOld(tmp, particleCount);
   } else if (key == '3') {
     ATYPE[] tmp = new ATYPE[] {ATYPE.N, ATYPE.H, ATYPE.H, ATYPE.H};
-    makeMixture(tmp, particleCount);
+    makeMixtureOld(tmp, particleCount);
   } else if (key == '4') {
     ATYPE[] tmp = new ATYPE[] {ATYPE.C, ATYPE.H, ATYPE.H, ATYPE.H, ATYPE.H, ATYPE.O, ATYPE.O, ATYPE.O};
+    makeMixtureOld(tmp, particleCount);
+  } else if (key == '5') {
+    ATYPE[] tmp = new ATYPE[] {ATYPE.C, ATYPE.H, ATYPE.H, ATYPE.H, ATYPE.H, ATYPE.O, ATYPE.O, ATYPE.N, ATYPE.N, ATYPE.N, ATYPE.Na, ATYPE.Cl, ATYPE.Br};
+    makeMixtureOld(tmp, particleCount);
+  } else if (key == '6') {
+    recipecomponent[] tmp = new recipecomponent[] { new recipecomponent (ATYPE.Br,1), new recipecomponent(ATYPE.Na,2), new recipecomponent(ATYPE.Cl,4),new recipecomponent(ATYPE.N,20),new recipecomponent(ATYPE.O,50),new recipecomponent(ATYPE.O,100), new recipecomponent(ATYPE.C, 90),new recipecomponent(ATYPE.H, 200)};
     makeMixture(tmp, particleCount);
+  } else if (key == '7') { //rough estimation of early atmosphere (what I can do)
+    recipecomponent[] tmp = new recipecomponent[]{
+      new recipecomponent(ATYPE.C, 200),
+      new recipecomponent(ATYPE.O, 250),
+      new recipecomponent(ATYPE.H, 300),
+      new recipecomponent(ATYPE.N, 100),
+      new recipecomponent(ATYPE.S, 50),
+      new recipecomponent(ATYPE.Na,40),
+      new recipecomponent(ATYPE.Cl,40),
+      new recipecomponent(ATYPE.Br,10)
+    };
+    makeMixture(tmp,particleCount);
   } else if (key == '0') {
     elemCounter++;
     if (elemCounter > 1)
@@ -60,7 +103,7 @@ void keyPressed() {
     tickCount--;
     if (tickCount < 1)
       tickCount = 1;
-  } else if (key == '=') {
+  } else if (key == '+') {
     temp++;
     if (temp > 15)
       temp = 15;
@@ -72,9 +115,9 @@ void keyPressed() {
     displayMode++;
     if (displayMode > 3)
       displayMode = 0;
-  } else if (key == '`') {
+  } else if (key == 'ä') {
     paused = !paused;
-  } else if (key == '/') {
+  } else if (key == 'å') {
     showNonBonding = !showNonBonding;
   } else {
     if (shortcuts.containsKey(key))
@@ -102,7 +145,7 @@ void setup() {
   strokeCap(SQUARE);
   init();
   ATYPE[] tmp = new ATYPE[] {ATYPE.H, ATYPE.H, ATYPE.H, ATYPE.O};
-  makeMixture(tmp, 0);
+  makeMixtureOld(tmp, 0);
 }
 
 void draw() {
