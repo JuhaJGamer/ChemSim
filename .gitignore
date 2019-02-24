@@ -1,0 +1,9 @@
+application.*
+*.zip
+NewChem/build
+build/
+*.class
+*_REMOTE
+*_LOCAL
+*_BACKUP
+
