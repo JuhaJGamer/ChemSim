@@ -74,7 +74,7 @@ void makeMixtureOld(ATYPE[] mix, int count) {
   }
 }
 
-int particleCount = 2400;
+int particleCount = 3200;
 
 void mouseWheel(MouseEvent event) {
    cameraZoom -= event.getCount() * mwheelMul;
