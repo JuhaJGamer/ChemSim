@@ -95,12 +95,11 @@ int particleCount = 800;
 public void mouseWheel(MouseEvent event) {
    cameraZoom -= event.getCount() * mwheelMul;
    if(cameraZoom <= 1) cameraZoom = 1;
-   rMul = initRMul * cameraZoom;
+   rMul = cameraZoom;
    viewPortWidth = (int)(width/cameraZoom);
    viewPortHeight = (int)(height/cameraZoom);
    viewPortTopX = cameraPosX - viewPortWidth/2;
    viewPortTopY = cameraPosY - viewPortHeight/2;
-   println(cameraZoom);
 }
 
 public void keyPressed() {
@@ -452,7 +451,7 @@ final float maxVel2 = maxVel * maxVel;
 final float minVel2 = minVel * minVel;
 
 final float tMul = 0.1f;
-final float initRMul = 1.5f;
+final float initRMul = 3;
 final float mMul = 1;
 final float repelMul = 0.07f;
 final float cMul = 0.01f;
@@ -460,14 +459,14 @@ final float dampMul = 0;
 final float overlapMul = 3;
 final float bMul = 12;
 final float bMul2 = 2.5f;
-final float bDistMul = 1.5f;
+final float bDistMul = 1.15f;
 final float veMul = 0;
 final float eaMul = 1.1f;
 final float wallMul = 20;
 final float probMul = 40;
 final float chargeDist = 4;
 
-float rMul = initRMul;
+float rMul = 1;
 
 final float g = 0;
 

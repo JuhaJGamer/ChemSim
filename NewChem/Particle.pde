@@ -8,22 +8,22 @@ final float maxVel2 = maxVel * maxVel;
 final float minVel2 = minVel * minVel;
 
 final float tMul = 0.1;
-final float initRMul = 1.5;
+final float initRMul = 3;
 final float mMul = 1;
-final float repelMul = 0.07;
+final float repelMul = 0.03;
 final float cMul = 0.01;
 final float dampMul = 0;
 final float overlapMul = 3;
 final float bMul = 12;
 final float bMul2 = 2.5;
-final float bDistMul = 1.5;
+final float bDistMul = 1.15;
 final float veMul = 0;
 final float eaMul = 1.1;
 final float wallMul = 20;
 final float probMul = 40;
 final float chargeDist = 4;
 
-float rMul = initRMul;
+float rMul = 1;
 
 final float g = 0;
 

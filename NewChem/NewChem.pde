@@ -79,7 +79,7 @@ int particleCount = 800;
 void mouseWheel(MouseEvent event) {
    cameraZoom -= event.getCount() * mwheelMul;
    if(cameraZoom <= 1) cameraZoom = 1;
-   rMul = initRMul * cameraZoom;
+   rMul = cameraZoom;
    viewPortWidth = (int)(width/cameraZoom);
    viewPortHeight = (int)(height/cameraZoom);
    viewPortTopX = cameraPosX - viewPortWidth/2;
