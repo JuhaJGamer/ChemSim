@@ -76,8 +76,8 @@ void mouseWheel(MouseEvent event) {
    rMul = rMulO * cameraZoom;
    viewPortWidth = (int)(width/cameraZoom);
    viewPortHeight = (int)(height/cameraZoom);
-   viewPortTopX = cameraPosX + viewPortWidth/2;
-   viewPortTopY = cameraPosY + viewPortHeight/2;
+   viewPortTopX = cameraPosX - viewPortWidth/2;
+   viewPortTopY = cameraPosY - viewPortHeight/2;
    println(cameraZoom);
 }
 
