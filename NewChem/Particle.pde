@@ -66,8 +66,12 @@ void mousePressed() {
       return;
     float minD2 = -1;
     for (int i = 0; i < particleList.size(); i++) {
-      PVector dif = PVector.sub(particleList.get(i).pos, new PVector(mouseX, mouseY));
+      PVector mouse = new PVector(mouseX, mouseY).div(cameraZoom).add(new PVector(viewPortTopX,viewPortTopY));
+      PVector dif = PVector.sub(particleList.get(i).pos, mouse);
       float d2 = dif.x * dif.x + dif.y * dif.y;
+      //stroke(1); //debugging purposes, please ignore
+      //noFill();
+      //ellipse(mouse.x, mouse.y, 2,2);
       if (d2 < minD2 || minD2 < 0) {
         minD2 = d2;
         dragParticle = particleList.get(i);
@@ -102,7 +106,8 @@ void mouseDragged() {
 
 void physUpdateParticles(Particle[] particles) {
   if (dragging) {
-    PVector dif = PVector.sub(new PVector(mouseX, mouseY), dragParticle.pos);
+    PVector mouse = new PVector(mouseX, mouseY).div(cameraZoom).add(new PVector(viewPortTopX,viewPortTopY));
+    PVector dif = PVector.sub(mouse, dragParticle.pos);
     dragParticle.addForce(PVector.mult(dif, dif.mag()));
   }
   for (int i = 0; i < particles.length; i++) {
