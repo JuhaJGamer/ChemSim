@@ -61,22 +61,43 @@ Particle dragParticle;
 boolean dragging = false;
 
 void mousePressed() {
-  if (particleList.size() == 0)
-    return;
-  float minD2 = -1;
-  for (int i = 0; i < particleList.size(); i++) {
-    PVector dif = PVector.sub(particleList.get(i).pos, new PVector(mouseX, mouseY));
-    float d2 = dif.x * dif.x + dif.y * dif.y;
-    if (d2 < minD2 || minD2 < 0) {
-      minD2 = d2;
-      dragParticle = particleList.get(i);
+  if(mouseButton == LEFT) {
+    if (particleList.size() == 0)
+      return;
+    float minD2 = -1;
+    for (int i = 0; i < particleList.size(); i++) {
+      PVector dif = PVector.sub(particleList.get(i).pos, new PVector(mouseX, mouseY));
+      float d2 = dif.x * dif.x + dif.y * dif.y;
+      if (d2 < minD2 || minD2 < 0) {
+        minD2 = d2;
+        dragParticle = particleList.get(i);
+      }
     }
+    dragging = true;
   }
-  dragging = true;
+  else if(mouseButton == CENTER) {
+   lastCPosX = cameraPosX;
+   lastCPosY = cameraPosY;
+   lastMX = mouseX;
+   lastMY = mouseY;
+   //println(mouseX);
+  }
 }
 
 void mouseReleased() {
   dragging = false;
+}
+
+void mouseDragged() {
+   if(mousePressed && mouseButton==CENTER) {
+       cameraPosX = (int)(lastCPosX + (lastMX - mouseX) / cameraZoom);
+       cameraPosY = (int)(lastCPosY + (lastMY - mouseY) / cameraZoom);
+       viewPortWidth = (int)(width/cameraZoom);
+       viewPortHeight = (int)(height/cameraZoom);
+       viewPortTopX = cameraPosX - viewPortWidth/2;
+       viewPortTopY = cameraPosY - viewPortHeight/2;
+       println(cameraPosX);
+   }
 }
 
 void physUpdateParticles(Particle[] particles) {
@@ -170,16 +191,16 @@ class Particle {
     if(displayMode == 3 && !nonBonding) {
       fill(255);
       if(atom.atype != ATYPE.H && atom.atype != ATYPE.C) {
-        ellipse(pos.x * cameraZoom, pos.y * cameraZoom, 2 * r, 2 * r);
+        ellipse((pos.x-viewPortTopX) * cameraZoom, (pos.y-viewPortTopY) * cameraZoom, 2 * r, 2 * r);
         textSize(2 * r);
         fill(0);
         text(atom.atype.toString(), pos.x, pos.y);
       } else if (atom.atype == ATYPE.C) {
         fill(0);
-        ellipse(pos.x * cameraZoom, pos.y * cameraZoom, 0.8 * rMul, 0.8 * rMul);
+        ellipse((pos.x-viewPortTopX) * cameraZoom, (pos.y-viewPortTopY) * cameraZoom, 0.8 * rMul, 0.8 * rMul);
       }
     } else {
-      ellipse(pos.x * cameraZoom, pos.y * cameraZoom, 2 * r * rMul, 2 * r * rMul);
+      ellipse((pos.x-viewPortTopX) * cameraZoom, (pos.y-viewPortTopY) * cameraZoom, 2 * r * rMul, 2 * r * rMul);
       if (displayMode == 1 && !nonBonding) {
         textSize(2 * r);
         fill(0);

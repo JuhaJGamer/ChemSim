@@ -26,6 +26,10 @@ boolean showNonBonding = false;
 
 int cameraPosX = width/2;
 int cameraPosY = height/2;
+int lastCPosY = 0;
+int lastCPosX = 0;
+int lastMX = 0;
+int lastMY = 0;
 float cameraZoom = 1;
 float mwheelMul = 0.2;
 
