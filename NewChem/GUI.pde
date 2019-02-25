@@ -6,16 +6,16 @@ abstract class GUIWidget {
   protected PVector pos; //position vector (usually top left)
   
   protected void setColor(int _color) {
-    if(_color >= pow(2,24) || _color < 0) { // Color over 24 bits
+    /*if(_color >= pow(2,24) || _color < 0) { // Color over 24 bits
       throw new RuntimeException("Color MUST be a 24-bit positive integer: got " + _color); 
-    }
+    }*/
     this._color = _color;
   }
   
   protected void setColor(int _color, int alpha) {
-    if(_color >= pow(2,24) || _color < 0) { // Color over 24 bits
+    /*if(_color >= pow(2,24) || _color < 0) { // Color over 24 bits
       throw new RuntimeException("Color MUST be a 24-bit positive integer: got" + _color); 
-    }
+    }*/
     if(alpha >= pow(2,8) ||alpha < 0) { //Alpha over 8 bits
       throw new RuntimeException("Alpha MUST be an 8-bit positive integer: got " + alpha );
     }
@@ -101,7 +101,7 @@ class Label extends GUIWidget {
 }
 
 void initGUI() {
-  guiWidgetList.add(new Panel(0,0,1000,1000,0x0,0xDD));
+  guiWidgetList.add(new Panel(0,0,width/4,height/2,#DDDDDD,0xDD));
 }
 
 ArrayList<GUIWidget> guiWidgetList = new ArrayList<GUIWidget>();
