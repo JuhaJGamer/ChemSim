@@ -61,6 +61,7 @@ Particle dragParticle;
 boolean dragging = false;
 
 void mousePressed() {
+  GUIMouse(ui_PRESS);
   if(mouseButton == LEFT) {
     if (particleList.size() == 0)
       return;
@@ -87,10 +88,12 @@ void mousePressed() {
 }
 
 void mouseReleased() {
+  GUIMouse(ui_RELEASE);
   dragging = false;
 }
 
 void mouseDragged() {
+   GUIMouse(ui_DRAG);
    if(mousePressed && mouseButton==CENTER) {  
      cameraPos.x = (int)(lastCPos.x + (lastMX - mouseX));
      cameraPos.y = (int)(lastCPos.y + (lastMY - mouseY));

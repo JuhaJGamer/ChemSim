@@ -1,3 +1,10 @@
+//Mouse interaction constants
+final int ui_DRAG = 0;
+final int ui_MOVE = 1;
+final int ui_PRESS = 2;
+final int ui_RELEASE = 3;
+
+
 
 //Main abstact class so that I can sort everything into arraylists. Also has some of the common values built in
 abstract class GUIWidget {
@@ -34,7 +41,7 @@ abstract class GUIWidget {
   void show() { //Function for drawing, override this when making the widgets;
   
   }
-  void mouseInteract(){ //Function for interaction and updating the widget. Override this too.
+  void mouseInteract(int action){ //Function for interaction and updating the widget. Override this too.
   
   }
   void keyInteract() { //Ditto
@@ -137,13 +144,74 @@ class Label extends GUIWidget {
      textSize(textSize);
      textAlign(align);
      text(text,pos.x,pos.y+textSize);
-     println("woo");
    }
+}
+
+class Slider extends GUIWidget {
+  private int rangeMax = 100;
+  private int rangeMin = 0;
+  private int value = 0;
+  private int slideColor = 0;
+  private int slideAlpha = 0;
+  private int _length = 100;
+  private int stroke = 15;
+  private boolean dragged = false;
+  private int lastMouse = 0;
+  private int oldSlider = 0;
+  
+  public Slider(PVector pos,int _length,int stroke, int _color, int alpha, int slideColor, int slideAlpha) {
+    this.pos = pos;
+    this._length = _length;
+    this.stroke = stroke;
+    this._color = _color;
+    this.alpha = alpha;
+    this.slideColor = slideColor;
+    this.slideAlpha = slideAlpha;
+  }
+  
+  public Slider(int x, int y,int _length,int stroke, int _color, int alpha, int slideColor, int slideAlpha) {
+    this(new PVector(x,y),_length,stroke,_color,alpha,slideColor,slideAlpha);
+  }
+  
+  public void setSlidePos(int value) {
+    if(value > rangeMax || value < rangeMin) {
+      throw new RuntimeException("Value must be in slider range"); 
+    }
+    this.value = value;
+  }
+  
+  void show() {
+    strokeWeight(stroke);
+    stroke(_color,alpha);
+    line(pos.x,pos.y,_length,pos.y);
+    noStroke();
+    fill(slideColor,slideAlpha);
+    rect(pos.x+(_length/rangeMax)*value-15,pos.y-15,30,30);
+  }
+  
+  void mouseInteract(int action) {
+    if(action == ui_PRESS) {
+      if(mouseX > pos.x+(rangeMax/_length)*value-15 && mouseX < pos.x+(rangeMax/_length)*value+15
+      && mouseY > pos.y-15 && mouseY < pos.y+15) {
+        dragged = true;
+        println("sliderClick");
+        oldSlider = (int)pos.x+(rangeMax/_length)*value;
+        lastMouse = mouseX;
+      }
+    } else if(action == ui_DRAG && dragged) {
+      value = (int)((float)(mouseX-lastMouse)*((float)rangeMax/(float)_length));
+      println(value);
+      if(value > rangeMax) value = rangeMax;
+      if(value < rangeMin) value = rangeMin;
+    }
+  }
 }
 
 void initGUI() {
   guiWidgetList.add(new Panel(0,0,width/4,height/2,#DDDDDD,0xDD));
   guiWidgetList.add(new Label(22,"FPS: 0",15,15,0));
+  guiWidgetList.add(new Label(22,"Maximum particles: 0",15,52,0));
+  guiWidgetList.add(new Slider(30,104,width/4-30,15,#AFAFAF,127,#FFFFFF,0xCD));
 }
 
 ArrayList<GUIWidget> guiWidgetList = new ArrayList<GUIWidget>();
@@ -159,8 +227,16 @@ void drawGUI() { //GUI drawing
   }
 }
 
+void GUIMouse(int action) {
+  for(int i = 0; i < guiWidgetList.size(); i++) {
+     guiWidgetList.get(i).mouseInteract(action);
+     //println("Running show() for element:" + i);
+   }
+}
+
 void GUIupdate() {
   if(showGUI) {
     ((Label)guiWidgetList.get(1) ).setText("FPS: " + (int)frameRate);
+    ((Label)guiWidgetList.get(2) ).setText("Maximum particles: " + particleCount);
   }
 }
