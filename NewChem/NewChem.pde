@@ -35,6 +35,9 @@ int viewPortWidth = width;
 int viewPortHeight = height;
 
 int elemCounter = 0;
+boolean showGUI = false;
+int eSlider = 80;
+int wSlider = 0;
 
 class recipecomponent {
    public ATYPE atom;
@@ -156,6 +159,9 @@ void keyPressed() {
     paused = !paused;
   } else if (key == 'å') {
     showNonBonding = !showNonBonding;
+  } else if (key == 'g') {
+    showGUI = !showGUI;
+    //println(showGUI);
   } else {
     if (shortcuts.containsKey(key))
       particleList.add(new Particle(getMousePos(), randVel(1), new Atom(shortcuts.get(key)), particleList.size()));
@@ -178,6 +184,7 @@ void draw() {
     for (int i = 0; i < tickCount; i++)
       physUpdateParticles(particles);
   showParticles(particles, displayMode);
+  drawGUI();
   //println(frameRate);
   //println(elemCounter);
 }

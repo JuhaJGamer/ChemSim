@@ -8,7 +8,7 @@ final float maxVel2 = maxVel * maxVel;
 final float minVel2 = minVel * minVel;
 
 final float tMul = 0.1;
-final float initRMul = 3;
+final float initRMul = 1.5;
 final float mMul = 1;
 final float repelMul = 0.03;
 final float cMul = 0.01;
@@ -62,6 +62,7 @@ boolean dragging = false;
 
 void mousePressed() {
   if(mouseButton == LEFT) {
+    GUIInteract(); //GUI interaction
     if (particleList.size() == 0)
       return;
     float minD2 = -1;
@@ -98,7 +99,7 @@ void mouseDragged() {
      viewPortHeight = (int)(height/cameraZoom);
      viewPortTopLeft.x = cameraPos.x - viewPortWidth/2;
      viewPortTopLeft.y = cameraPos.y - viewPortHeight/2;
-     println(lastCPos.x);
+     //println(lastCPos.x);
    }
 }
 
