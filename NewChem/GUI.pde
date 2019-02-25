@@ -101,7 +101,7 @@ class Label extends GUIWidget {
 }
 
 void initGUI() {
-  guiWidgetList.add(new Panel(0,0,1000,1000,0xDDD,0xDD));
+  guiWidgetList.add(new Panel(0,0,1000,1000,0x0,0xDD));
 }
 
 ArrayList<GUIWidget> guiWidgetList = new ArrayList<GUIWidget>();
