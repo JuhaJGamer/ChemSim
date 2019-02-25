@@ -62,7 +62,6 @@ boolean dragging = false;
 
 void mousePressed() {
   if(mouseButton == LEFT) {
-    GUIInteract(); //GUI interaction
     if (particleList.size() == 0)
       return;
     float minD2 = -1;

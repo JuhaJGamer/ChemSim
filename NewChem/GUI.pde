@@ -2,7 +2,7 @@
 //Main abstact class so that I can sort everything into arraylists. Also has some of the common values built in
 abstract class GUIWidget {
   protected int _color = 0x000000; //color as a 24-bit integer
-  protected int alpha = (byte)0xFF; //alpha as an 8-bit integer
+  protected int alpha = 255; //alpha as an 8-bit integer
   protected PVector pos; //position vector (usually top left)
   
   protected void setColor(int _color) {
@@ -34,8 +34,11 @@ abstract class GUIWidget {
   void show() { //Function for drawing, override this when making the widgets;
   
   }
-  void interact(){ //Function for interaction and updating the widget. Override this too.
+  void mouseInteract(){ //Function for interaction and updating the widget. Override this too.
   
+  }
+  void keyInteract() { //Ditto
+    
   }
 }
 
@@ -69,39 +72,78 @@ class Panel extends GUIWidget {
    
    public void show() {
      fill(_color, alpha);
-     println("Fill:" + _color + "," + alpha);
      rect(pos.x, pos.y, size.x, size.y);
-     println(pos.x + " " + pos.y + " " + size.x + " " + size.y + " ");
    }
 }
 
 class Label extends GUIWidget {
    private String text;
+   int align = LEFT;
+   int textSize = 22;
    
-   public Label(String text, PVector position) {
+   public Label(int textSize, String text, PVector position, int _color) {
      this.text = text;
      this.pos = position;
+     this.textSize = textSize;
+     setColor(_color);
    }
    
-   public void setText(String text) {
+   public Label(int textSize, String text, PVector position, int _color, int alpha) {
+     this.text = text;
+     this.pos = position;
+     this.textSize = textSize;
+     setColor(_color,alpha);
+   }
+   
+   public Label(int textSize,String text, int x, int y, int _color, int alpha) {
+     this.text = text;
+     this.pos = new PVector(x,y);
+     this.textSize = textSize;
+     setColor(_color,alpha);
+   }
+   
+   public Label(int textSize, String text, int x, int y, int _color) {
+     this.text = text;
+     this.pos = new PVector(x,y);
+     this.textSize = textSize;
+     setColor(_color);
+   }
+   
+   public Label setText(String text) {
      this.text = text; 
+     return this;
    }
    
    public String getText() {
       return text;
    }
    
-   public void setPos(PVector position) {
+   public Label setPos(PVector position) {
       this.pos = position; 
+      return this;
    }
    
    public PVector getPos() {
       return pos;
    }
+   
+   public Label setAlign(int align) {
+     this.align = align;  
+     return this;
+   }
+   
+   public void show() {
+     fill(_color,alpha);
+     textSize(textSize);
+     textAlign(align);
+     text(text,pos.x,pos.y+textSize);
+     println("woo");
+   }
 }
 
 void initGUI() {
   guiWidgetList.add(new Panel(0,0,width/4,height/2,#DDDDDD,0xDD));
+  guiWidgetList.add(new Label(22,"FPS: 0",15,15,0));
 }
 
 ArrayList<GUIWidget> guiWidgetList = new ArrayList<GUIWidget>();
@@ -117,6 +159,8 @@ void drawGUI() { //GUI drawing
   }
 }
 
-void GUIInteract() {
-  //if() {}
+void GUIupdate() {
+  if(showGUI) {
+    ((Label)guiWidgetList.get(1) ).setText("FPS: " + (int)frameRate);
+  }
 }

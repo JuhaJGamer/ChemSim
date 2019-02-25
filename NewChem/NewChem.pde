@@ -185,6 +185,7 @@ void draw() {
     for (int i = 0; i < tickCount; i++)
       physUpdateParticles(particles);
   showParticles(particles, displayMode);
+  GUIupdate();
   drawGUI();
   //println(frameRate);
   //println(elemCounter);
