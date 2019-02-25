@@ -6,4 +6,4 @@ build/
 *_REMOTE
 *_LOCAL
 *_BACKUP
-
+*.autosave
