@@ -13,29 +13,33 @@ abstract class GUIWidget {
   protected int _color = 0x000000FF; //color as a 32-bit integer
   protected PVector pos; //position vector (usually top left)
   
-  protected setColor(int _color) {
+  protected void setColor(int _color) {
     if(_color > pow(2,32)) { // Color over 32 bits
       throw new RuntimeException("Color MUST be either a 24- or a 32-bit integer"); 
     }
-    byte tmp = getByte(_color,1); //store alpha
-    _color = _color * pow(16,2); //move the thingy by two 
+    byte tmp = (byte)getByte(_color,1); //store alpha
+    _color = _color * (int)pow(16,2); //move the thingy by two 
     _color += tmp;
   }
   
-  protected getColor() {
+  protected int getColor() {
     return _color;
   }
   
-  protected getColor24() {
+  protected int getColor24() {
     return _color >> 256;
   }
   
-  protected getAlpha() {
+  protected int getAlpha() {
     return getByte(_color,1); 
   }
   
-  void show(); //Function for drawing, override this when making the widgets;
-  void interact(); //Function for interaction and updating the widget. Override this too.
+  void show() { //Function for drawing, override this when making the widgets;
+  
+  }
+  void interact(){ //Function for interaction and updating the widget. Override this too.
+  
+  }
 }
 
 //Panel for GUI decoration
@@ -43,16 +47,16 @@ class Panel extends GUIWidget {
    private PVector size; //Size vector (w,h)
    
    public Panel (PVector pos,int _color) { //Constructor with PVector, int
-     this._color = _color * (int)pow(10,8 - (int)log10(_color)); //Making sure order of magnitude is always 8
+     //this._color = _color * (int)pow(10,8 - (int)log10(_color)); //Making sure order of magnitude is always 8
      this.pos = pos;
    }
    
-   public Panel (PVector pos, int _color, int alpha = 255) {
+   /*public Panel (PVector pos, int _color) {
      if(_color > pow(2,6)) {
        throw new RuntimeException("Color MUST be either a 24-bit integer or a 32-bit integer"); 
      }
       this._color = _color * (int)pow(10,6-(int)log10(_color)); //Magnitude always 6; 
-   }
+   }*/
 }
 
 class Label extends GUIWidget {
@@ -102,5 +106,5 @@ void drawGUI() { //GUI drawing
 }
 
 void GUIInteract() {
-  if() 
+  //if() {}
 }
