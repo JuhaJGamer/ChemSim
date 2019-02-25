@@ -1,37 +1,34 @@
 
-//base-2 logarithm for binary magnitude
-float log2 (int x) {
-  return (log(x) / log(2)); 
-}
-
-int getByte(int in, int _byte) {
-  return (in >> _byte*2)%256;
-}
-
 //Main abstact class so that I can sort everything into arraylists. Also has some of the common values built in
 abstract class GUIWidget {
-  protected int _color = 0x000000FF; //color as a 32-bit integer
+  protected int _color = 0x000000; //color as a 24-bit integer
+  protected int alpha = (byte)0xFF; //alpha as an 8-bit integer
   protected PVector pos; //position vector (usually top left)
   
   protected void setColor(int _color) {
-    if(_color > pow(2,32)) { // Color over 32 bits
-      throw new RuntimeException("Color MUST be either a 24- or a 32-bit integer"); 
+    if(_color >= pow(2,24) || _color < 0) { // Color over 24 bits
+      throw new RuntimeException("Color MUST be a 24-bit positive integer: got " + _color); 
     }
-    byte tmp = (byte)getByte(_color,1); //store alpha
-    _color = _color * (int)pow(16,2); //move the thingy by two 
-    _color += tmp;
+    this._color = _color;
+  }
+  
+  protected void setColor(int _color, int alpha) {
+    if(_color >= pow(2,24) || _color < 0) { // Color over 24 bits
+      throw new RuntimeException("Color MUST be a 24-bit positive integer: got" + _color); 
+    }
+    if(alpha >= pow(2,8) ||alpha < 0) { //Alpha over 8 bits
+      throw new RuntimeException("Alpha MUST be an 8-bit positive integer: got " + alpha );
+    }
+    this._color = _color;
+    this.alpha = alpha;
   }
   
   protected int getColor() {
     return _color;
   }
   
-  protected int getColor24() {
-    return _color >> 256;
-  }
-  
   protected int getAlpha() {
-    return getByte(_color,1); 
+    return alpha; 
   }
   
   void show() { //Function for drawing, override this when making the widgets;
@@ -46,17 +43,36 @@ abstract class GUIWidget {
 class Panel extends GUIWidget { 
    private PVector size; //Size vector (w,h)
    
-   public Panel (PVector pos,int _color) { //Constructor with PVector, int
-     //this._color = _color * (int)pow(10,8 - (int)log10(_color)); //Making sure order of magnitude is always 8
+   public Panel (PVector pos,PVector size,int _color) { //Constructor with PVector, int
+     setColor(_color);
      this.pos = pos;
+     this.size = size;
    }
    
-   /*public Panel (PVector pos, int _color) {
-     if(_color > pow(2,6)) {
-       throw new RuntimeException("Color MUST be either a 24-bit integer or a 32-bit integer"); 
-     }
-      this._color = _color * (int)pow(10,6-(int)log10(_color)); //Magnitude always 6; 
-   }*/
+   public Panel (PVector pos, PVector size, int _color, int alpha) {
+      this.pos = pos;
+      this.size = size;
+      setColor(_color, alpha);
+   }
+   
+   public Panel (int x, int y, int w, int h,int _color) { //Constructor with PVector, int
+     setColor(_color);
+     this.pos = new PVector(x,y);
+     this.size = new PVector(w,h);
+   }
+   
+   public Panel (int x, int y, int w, int h, int _color, int alpha) {
+      this.pos = new PVector(x,y);
+      this.size = new PVector(w,h);
+      setColor(_color, alpha);
+   }
+   
+   public void show() {
+     fill(_color, alpha);
+     println("Fill:" + _color + "," + alpha);
+     rect(pos.x, pos.y, size.x, size.y);
+     println(pos.x + " " + pos.y + " " + size.x + " " + size.y + " ");
+   }
 }
 
 class Label extends GUIWidget {
@@ -80,28 +96,24 @@ class Label extends GUIWidget {
    }
    
    public PVector getPos() {
-      return pos; 
+      return pos;
    }
 }
+
+void initGUI() {
+  guiWidgetList.add(new Panel(0,0,1000,1000,0xDDD,0xDD));
+}
+
+ArrayList<GUIWidget> guiWidgetList = new ArrayList<GUIWidget>();
 
 void drawGUI() { //GUI drawing
   //println("guifunc");
   if(showGUI) {
    // println("printing gui");
-    fill(0xDD,0xDD);
-    rect(0,0,width/4,height/3,4);
-    fill(0x00,0xE6);
-    textSize(22);
-    textAlign(LEFT, CENTER);
-    text("FPS:" + (int)frameRate,1,15);
-    text("Max Elements:" + particleCount,1,52);
-    stroke(0xAF,0xE6);
-    strokeWeight(15);
-    line(15,84,width/4-15,84);
-    fill(0xEE,0xE6);
-    noStroke();
-    rect(width/6/350*eSlider,69,30,30);
-    textAlign(CENTER, CENTER);
+   for(int i = 0; i < guiWidgetList.size(); i++) {
+     guiWidgetList.get(i).show();
+     //println("Running show() for element:" + i);
+   }
   }
 }
 

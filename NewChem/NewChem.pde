@@ -12,6 +12,7 @@ void init() {
   initNonBondStrs();
   initBondEnergies();
   initShortcuts();
+  initGUI();
   viewPortTopLeft = new PVector(0,0);
   viewPortWidth = width;
   viewPortHeight = height;
