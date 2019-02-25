@@ -196,7 +196,7 @@ class Particle {
         ellipse((pos.x-viewPortTopLeft.x) * cameraZoom, (pos.y-viewPortTopLeft.y) * cameraZoom, 2 * r, 2 * r);
         textSize(2 * r * rMul);
         fill(0);
-        text(atom.atype.toString(), (pos.x-viewPortTopLeft.x) * cameraZoom, (pos.y-viewPortTopLeft.x) * cameraZoom);
+        text(atom.atype.toString(), (pos.x-viewPortTopLeft.x) * cameraZoom, (pos.y-viewPortTopLeft.y) * cameraZoom);
       } else if (atom.atype == ATYPE.C) {
         fill(0);
         ellipse((pos.x-viewPortTopLeft.x) * cameraZoom, (pos.y-viewPortTopLeft.y) * cameraZoom, 0.8 * rMul, 0.8 * rMul);
